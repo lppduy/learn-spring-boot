@@ -1,7 +1,7 @@
 package dev.lppduy.learnspringboot.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import dev.lppduy.learnspringboot.util.PhoneNumber;
+import dev.lppduy.learnspringboot.util.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,6 +11,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
+import static dev.lppduy.learnspringboot.util.Gender.*;
 
 public class UserRequestDTO implements Serializable {
     @NotBlank(message = "firstName must be not blank") // Khong cho phep gia tri blank
@@ -29,6 +31,16 @@ public class UserRequestDTO implements Serializable {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @JsonFormat(pattern = "MM/dd/yyyy")
     private Date dateOfBirth;
+
+    @EnumPattern(name = "status", regexp = "ACTIVE|INACTIVE|NONE")
+    private UserStatus status;
+
+    @GenderSubset(anyOf = {MALE, FEMALE, OTHER})
+    private Gender gender;
+
+    @NotNull(message = "type must be not null")
+    @EnumValue(name = "type", enumClass = UserType.class)
+    private String type;
 
     @NotEmpty(message = "permissions must be not empty")
     private List<String> permissions;
@@ -91,5 +103,29 @@ public class UserRequestDTO implements Serializable {
 
     public void setPermissions(List<String> permissions) {
         this.permissions = permissions;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
